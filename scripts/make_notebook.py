@@ -6,10 +6,8 @@ def add_md(source):
     cells.append({
         "cell_type": "markdown",
         "metadata": {},
-        "source": source.strip().split("\n")
+        "source": [line + "\n" for line in source.strip().split("\n")]
     })
-    # ensure newlines
-    cells[-1]["source"] = [line + "\n" for line in cells[-1]["source"]]
 
 def add_code(source):
     cells.append({
@@ -17,9 +15,8 @@ def add_code(source):
         "execution_count": None,
         "metadata": {},
         "outputs": [],
-        "source": source.strip().split("\n")
+        "source": [line + "\n" for line in source.strip().split("\n")]
     })
-    cells[-1]["source"] = [line + "\n" for line in cells[-1]["source"]]
 
 # Notebook Structure
 add_md("""# ⚡ VoltRelay Energy: Data Analytics Hackathon
@@ -39,8 +36,9 @@ However, management faces a severe **Triple-Squeeze Paradox**:
 This notebook executes a top-to-bottom, rigorous forensic audit of the entire VoltRelay network, repairs subtle telemetry distortions (including the firmware timezone bug), and provides an evidence-based recommendation for the upcoming multi-crore operating budget.""")
 
 add_md("""---
-## Section 1: Setup & Data Ingestion
-We utilize **DuckDB** paired with **Pandas**, **Seaborn**, and **Matplotlib** for zero-copy, high-performance in-memory analytics capable of querying millions of records in sub-second latency.""")
+## Section 1: Setup & Automated Data Ingestion
+We utilize **DuckDB** paired with **Pandas**, **Seaborn**, and **Matplotlib** for zero-copy, high-performance in-memory analytics capable of querying millions of records in sub-second latency.
+The cell below automatically downloads all 8 dataset files directly from Google Drive using direct IDs.""")
 
 add_code("""# Install dependencies if running in Google Colab
 !pip install duckdb gdown -q
@@ -57,13 +55,30 @@ plt.rcParams['font.sans-serif'] = 'DejaVu Sans'
 plt.rcParams['figure.dpi'] = 150
 
 # Ensure data directory exists
-if not os.path.exists('data'):
-    os.makedirs('data', exist_ok=True)
-    print("Downloading dataset from Google Drive...")
-    os.system('python -m gdown --folder "https://drive.google.com/drive/folders/1qsjGWrgmEvOaf2Is2fh7RgVEkKd1V3df?usp=sharing" -O data')
+os.makedirs('data', exist_ok=True)
+
+# Direct Google Drive IDs for each dataset file
+file_ids = {
+    'batteries.csv': '1ODkUSlw3EzpzznYdzZe74wG84t3783al',
+    'city_daily_context.csv': '1UMDldAGOUEJitZ32D4M9szwRMvUjZc4G',
+    'fleet_partners.csv': '1fMy7LxZxESBqeveFB3iabpE3sxjnkkmY',
+    'riders.csv': '1w3TxH3NY2rk_agikJtv3oCq2OeXv1Pii',
+    'station_hourly_status.csv': '1pbGACXY95BemIbrSlRxE6o8CGcc2bSCn',
+    'stations.csv': '1WEou9h5lYvALA3IreUFoCRbmIh2_9Dm2',
+    'support_tickets.csv': '1tWK-zDoRy8QFqQe9ESw8ttpKHqMqMXbh',
+    'swap_events.csv': '15qkHruvAilomjWdNgntXrQLK4-_NPOZZ'
+}
+
+for fname, fid in file_ids.items():
+    dest = os.path.join('data', fname)
+    if not os.path.exists(dest) or os.path.getsize(dest) == 0:
+        print(f"Downloading {fname}...")
+        !gdown --id {fid} -O "{dest}" --fuzzy -q
+    else:
+        print(f"Verified {fname} ({os.path.getsize(dest):,} bytes)")
 
 con = duckdb.connect()
-print("DuckDB connected. Ready for analytics!")""")
+print("\\nDuckDB connected. All datasets ready for analytics!")""")
 
 add_md("""---
 ## Section 2: Data Audit & Forensic Data Cleaning
@@ -438,4 +453,4 @@ notebook_data = {
 with open('VoltRelay_Data_Analytics_Hackathon.ipynb', 'w', encoding='utf-8') as f:
     json.dump(notebook_data, f, indent=2)
 
-print("Jupyter Notebook 'VoltRelay_Data_Analytics_Hackathon.ipynb' created successfully!")
+print("Jupyter Notebook 'VoltRelay_Data_Analytics_Hackathon.ipynb' updated with robust downloader!")
