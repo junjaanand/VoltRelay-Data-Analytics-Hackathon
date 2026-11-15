@@ -72,23 +72,16 @@ To ensure 100% analytical rigor, our pipeline resolved several deliberate anomal
 
 ---
 
-## 🚀 Repository Contents & Project Structure
+## 🚀 Repository Structure
 
 ```
-├── VoltRelay_Data_Analytics_Hackathon.ipynb   # Complete, runnable Google Colab Notebook
-├── VoltRelay_Executive_Analysis_Report.md     # Comprehensive Executive Strategy Report
-├── Video_Pitch_Script.md                      # 3-Minute Leadership Video Pitch Script
-├── LinkedIn_Post.md                           # Official LinkedIn Submission Post
+├── VoltRelay_Data_Analytics_Hackathon.ipynb   # Primary Deliverable: Complete Google Colab Notebook
+├── VoltRelay_Executive_Analysis_Report.md     # Deliverable 2: Comprehensive Executive Strategy Report
+├── Video_Pitch_Script.md                      # Deliverable 3: 3-Minute Leadership Video Pitch Script
+├── LinkedIn_Post.md                           # Deliverable 4: Official LinkedIn Post & Graphics
 ├── outputs/
 │   └── plots/                                 # 6 High-Resolution Publication Charts
-│       ├── 01_core_paradox_monthly_trend.png
-│       ├── 02_battery_supplier_degradation.png
-│       ├── 03_partner_margin_comparison.png
-│       ├── 04_firmware_bug_correction.png
-│       ├── 05_gen1_summer_thermal_failure.png
-│       └── 06_budget_decision_roi.png
-├── generate_all_insights_and_plots.py         # Automated pipeline generating all figures
-├── deep_analysis.py                           # Core DuckDB analytical queries
+├── scripts/                                   # Data pipelines & DuckDB analytical scripts
 └── README.md                                  # Executive summary & documentation
 ```
 
